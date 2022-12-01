@@ -127,6 +127,11 @@
     {{-- css datatables --}}
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.1/css/rowReorder.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css">
+
+    {{-- jqconfirm --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @endpush
 
 @push('js')
@@ -143,6 +148,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/rowreorder/1.3.1/js/dataTables.rowReorder.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+
+    {{-- jqconfirm --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
     <script>
@@ -159,6 +170,7 @@
             var table = $('.table').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,
                 dom: 'Blrftip',
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
                 lengthMenu: ['10', '25', '50', '100', 'All'],
@@ -253,15 +265,26 @@
             // click delete
             $('body').on('click', '.deleteUser', function() {
                 var userId = $(this).data('id');
-                confirm('Apakah anda yakin ingin menghapus?')
-                $.ajax({
-                    type: "delete",
-                    url: "{{ route('users') }}" + "/" + userId + "/delete",
-                    success: function(response) {
-                        table.draw();
-                    },
-                    error: function(response) {
-                        console.log('Error : ', response);
+                $.confirm({
+                    title: 'Hapus?!',
+                    content: 'Yakin anda ingin menghapus data?!',
+                    buttons: {
+                        confirm: function() {
+                            $.alert('Confirmed!');
+                            $.ajax({
+                                type: "delete",
+                                url: "{{ route('users') }}" + "/" + userId + "/delete",
+                                success: function(response) {
+                                    table.draw();
+                                },
+                                error: function(response) {
+                                    console.log('Error : ', response);
+                                }
+                            });
+                        },
+                        cancel: function() {
+                            $.alert('Canceled!');
+                        }
                     }
                 });
             });
