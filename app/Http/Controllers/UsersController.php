@@ -46,8 +46,8 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        $user = Users::find($id);
-        return response()->json($user);
+        $users = Users::find($id);
+        return response()->json($users);
     }
 
     public function destroy($id)

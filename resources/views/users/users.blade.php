@@ -229,7 +229,7 @@
             // edit
             $('body').on('click', '.editUser', function() {
                 var userId = $(this).data('id');
-                $.get("/users/" + userId + "/edit", function(data) {
+                $.get("{{ route('users') }}" + "/" + userId + "/edit", function(data) {
                     $('#modalTitle').html('Edit User');
                     $('#userModal').modal('show');
                     $('#userId').val(data.id);
