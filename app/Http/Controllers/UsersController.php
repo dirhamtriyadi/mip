@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Models\Users;
 use Illuminate\Http\Request;
 use Yajra\Datatables\DataTables;
 
@@ -12,7 +12,7 @@ class UsersController extends Controller
     {
         if ($request->ajax()) {
 
-            $data = User::all();
+            $data = Users::all();
 
             return DataTables::of($data)
                 ->addIndexColumn()
