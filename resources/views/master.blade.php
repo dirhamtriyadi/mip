@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AdminLTE 3 | Fixed Sidebar</title>
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="{{ asset('adminlte') }}/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte') }}/dist/css/adminlte.min.css">
+    @yield('css')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -50,7 +52,8 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('adminlte') }}/dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('adminlte') }}/dist/js/demo.js"></script>
+    {{-- <script src="{{ asset('adminlte') }}/dist/js/demo.js"></script> --}}
+    @yield('js')
 </body>
 
 </html>

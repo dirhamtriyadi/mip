@@ -18,3 +18,5 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
+Route::get('/users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users');
+Route::post('/users', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
