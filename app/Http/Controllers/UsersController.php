@@ -32,7 +32,7 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
-        User::updateOrCreate([
+        Users::updateOrCreate([
             'id' => $request->userId,
         ], [
             'role' => $request->role,
@@ -46,13 +46,13 @@ class UsersController extends Controller
 
     public function edit($id)
     {
-        $user = User::find($id);
+        $user = Users::find($id);
         return response()->json($user);
     }
 
     public function destroy($id)
     {
-        User::find($id)->delete();
+        Users::find($id)->delete();
         return response()->json(['succes' => 'User berhasil dihapus.']);
     }
 }
