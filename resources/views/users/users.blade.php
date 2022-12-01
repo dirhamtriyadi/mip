@@ -85,7 +85,7 @@
                         <div class="mb-3">
                             <p id="warning"></p>
                         </div>
-                        <input type="text" id="userId" name="userId">
+                        <input type="text" id="userId" name="userId" hidden>
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select" aria-label="Default select example" id="role" name="role">
