@@ -43,8 +43,8 @@
                             </div>
                             <div class="card-body">
                                 <!-- Button trigger modal -->
-                                <a class="btn btn-primary" href="javascript:void(0)" id="addUserButton">Tambah User</a>
-                                <table class="table" id="usersTable">
+                                <a class="btn btn-primary mb-2" href="javascript:void(0)" id="addUserButton">Tambah User</a>
+                                <table class="table">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -254,7 +254,6 @@
             $('body').on('click', '.deleteUser', function() {
                 var userId = $(this).data('id');
                 confirm('Apakah anda yakin ingin menghapus?')
-
                 $.ajax({
                     type: "delete",
                     url: "{{ route('users') }}" + "/" + userId + "/delete",

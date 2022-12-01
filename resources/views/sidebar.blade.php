@@ -68,7 +68,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('users') }}" class="nav-link">
+                        <a href="{{ route('users') }}" class="nav-link {{ Route::is('users') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
                             <p>
                                 Users
