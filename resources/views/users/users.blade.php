@@ -44,7 +44,7 @@
                             <div class="card-body">
                                 <!-- Button trigger modal -->
                                 <a class="btn btn-primary" href="javascript:void(0)" id="addUserButton">Tambah User</a>
-                                <table class="table">
+                                <table class="table" id="usersTable">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -85,7 +85,7 @@
                         <div class="mb-3">
                             <p id="warning"></p>
                         </div>
-                        <input type="text" id="userId" name="userId" hidden>
+                        <input type="text" id="userId" name="userId">
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select" aria-label="Default select example" id="role" name="role">
@@ -119,18 +119,31 @@
     </div>
 @endsection
 
-@section('css')
+@push('css')
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-@endsection
 
-@section('js')
+    {{-- css datatables --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+@endpush
+
+@push('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
+    {{-- js datatables --}}
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -146,6 +159,9 @@
             var table = $('.table').DataTable({
                 processing: true,
                 serverSide: true,
+                dom: 'Blrftip',
+                buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
+                lengthMenu: ['10', '25', '50', '100', 'All'],
                 ajax: "{{ route('users') }}",
                 columns: [{
                         data: 'DT_RowIndex',
@@ -180,10 +196,14 @@
                 ],
                 columnDefs: [{
                     target: 4,
-                    render: DataTable.render.datetime('YYYY/M/D LTS')
+                    render: function(data) {
+                        return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
+                    }
                 }, {
                     target: 5,
-                    render: DataTable.render.datetime('YYYY/M/D LTS')
+                    render: function(data) {
+                        return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
+                    }
                 }]
             });
 
@@ -191,7 +211,21 @@
             $('#addUserButton').click(function() {
                 $('#userId').val('');
                 $('#modalTitle').html('Tambah User');
-                $('#addUserModal').modal('show');
+                $('#userModal').modal('show');
+            });
+
+            // edit
+            $('body').on('click', '.editUser', function() {
+                var userId = $(this).data('id');
+                $.get("/users/" + userId + "/edit", function(data) {
+                    $('#modalTitle').html('Edit User');
+                    $('#userModal').modal('show');
+                    $('#userId').val(data.id);
+                    $('#role').val(data.role);
+                    $('#name').val(data.name);
+                    $('#email').val(data.email);
+                    $('#password').val('');
+                });
             });
 
             // click save
@@ -205,7 +239,7 @@
                     dataType: "json",
                     success: function(response) {
                         $('#userForm').trigger("reset");
-                        $('#addUserModal').modal('hide');
+                        $('#userModal').modal('hide');
                         table.draw();
                     },
                     error: function(response) {
@@ -215,6 +249,23 @@
                     }
                 });
             });
+
+            // click delete
+            $('body').on('click', '.deleteUser', function() {
+                var userId = $(this).data('id');
+                confirm('Apakah anda yakin ingin menghapus?')
+
+                $.ajax({
+                    type: "delete",
+                    url: "{{ route('users') }}" + "/" + userId + "/delete",
+                    success: function(response) {
+                        table.draw();
+                    },
+                    error: function(response) {
+                        console.log('Error : ', response);
+                    }
+                });
+            });
         });
     </script>
-@endsection
+@endpush

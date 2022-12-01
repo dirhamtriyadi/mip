@@ -20,3 +20,5 @@ Route::get('/', function () {
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
 Route::get('/users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users');
 Route::post('/users', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
+Route::get('/users/{id}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
+Route::delete('/users/{id}/delete', [\App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');

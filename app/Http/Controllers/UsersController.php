@@ -18,9 +18,9 @@ class UsersController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
 
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Edit" class="edit btn btn-primary btn-sm editUser">Edit</a>';
 
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="Delete" class="btn btn-danger btn-sm deleteUser">Delete</a>';
 
                     return $btn;
                 })
@@ -33,7 +33,7 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         User::updateOrCreate([
-            'id' => $request->id
+            'id' => $request->userId,
         ], [
             'role' => $request->role,
             'name' => $request->name,
@@ -41,6 +41,18 @@ class UsersController extends Controller
             'password' => $request->password,
         ]);
 
-        return response()->json(['success' => 'Product saved successfully.']);
+        return response()->json(['success' => 'User berhasil disimpan.']);
+    }
+
+    public function edit($id)
+    {
+        $user = User::find($id);
+        return response()->json($user);
+    }
+
+    public function destroy($id)
+    {
+        User::find($id)->delete();
+        return response()->json(['succes' => 'User berhasil dihapus.']);
     }
 }
