@@ -17,8 +17,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
-Route::get('/users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users');
-Route::post('/users', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
-Route::get('/users/{id}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
-Route::delete('/users/{id}/delete', [\App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
+Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+
+// Login routes
+Route::get('/login', [\App\Http\Controllers\LoginController::class, 'index'])->name('login')->middleware('guest');
+Route::post('/login', [\App\Http\Controllers\LoginController::class, 'login'])->name('login.login');
+Route::get('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->name('login.logout');
+
+// User routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users');
+    Route::post('/users', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
+    Route::get('/users/{id}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
+    Route::delete('/users/{id}/delete', [\App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
+});

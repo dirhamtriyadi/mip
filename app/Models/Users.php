@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Users extends Model
+class Users extends Authenticatable
 {
     use HasFactory;
 
@@ -15,7 +16,6 @@ class Users extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'role',
         'name',
         'email',
         'password',
