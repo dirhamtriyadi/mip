@@ -172,7 +172,10 @@
                 responsive: true,
                 dom: 'Blrftip',
                 buttons: ['copy', 'csv', 'excel', 'pdf', 'print'],
-                lengthMenu: ['10', '25', '50', '100', 'All'],
+                lengthMenu: [
+                    [10, 25, 50, 100, -1],
+                    [10, 25, 50, 100, "All"]
+                ],
                 ajax: "{{ route('users') }}",
                 columns: [{
                         data: 'DT_RowIndex',
