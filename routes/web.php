@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/notallowed', function () {
+    return view('pages.notallowed');
+})->name('notallowed');
+
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
 
 // Login routes
@@ -25,7 +29,7 @@ Route::post('/login', [\App\Http\Controllers\LoginController::class, 'login'])->
 Route::get('/logout', [\App\Http\Controllers\LoginController::class, 'logout'])->name('login.logout');
 
 // User routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin.auth'])->group(function () {
     Route::get('/users', [\App\Http\Controllers\UsersController::class, 'index'])->name('users');
     Route::post('/users', [\App\Http\Controllers\UsersController::class, 'store'])->name('users.store');
     Route::get('/users/{id}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
