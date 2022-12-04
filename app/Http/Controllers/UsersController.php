@@ -32,13 +32,14 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        $hashPassword = bcrypt($request->password);
         Users::updateOrCreate([
             'id' => $request->userId,
         ], [
             'role' => $request->role,
             'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password,
+            'password' => $hashPassword,
         ]);
 
         return response()->json(['success' => 'User berhasil disimpan.']);
