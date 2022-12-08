@@ -34,6 +34,19 @@ class UsersController extends Controller
 
     public function store(Request $request)
     {
+        $validate = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $request->userId,
+            'password' => 'required|min:8'
+        ], [
+            'name.required' => 'Nama tidak boleh kosong.',
+            'email.required' => 'Email tidak boleh kosong.',
+            'email.email' => 'Email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'password.required' => 'Password tidak boleh kosong.',
+            'password.min' => 'Password minimal 8 karakter.'
+        ]);
+
         $hashPassword = bcrypt($request->password);
         Users::updateOrCreate([
             'id' => $request->userId,
@@ -49,11 +62,19 @@ class UsersController extends Controller
 
     public function updatePassword(Request $request)
     {
+        $validate = $request->validate([
+            'password' => 'required|min:8'
+        ], [
+            'password.required' => 'Password tidak boleh kosong.',
+            'password.min' => 'Password minimal 8 karakter.']);
         $hashPassword = bcrypt($request->password);
         $user = Users::find($request->userIdPassword);
         $user->password = $hashPassword;
         $user->save();
-        return response()->json(['success' => 'Password berhasil diubah.']);
+        return response()->json([
+            'status' => true,
+            'message' => 'Password berhasil diubah.'
+        ]);
     }
 
     public function edit($id)

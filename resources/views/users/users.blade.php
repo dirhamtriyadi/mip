@@ -29,7 +29,9 @@
                         <!-- Default box -->
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Users</h3>
+                                <h3 class="card-title">
+                                    <h2>Users</h2>
+                                </h3>
 
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"
@@ -76,6 +78,15 @@
     <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $item)
+                                <li>{{ $item }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="modalTitle">Modal title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -89,7 +100,7 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">Role</label>
                             <select class="form-select" aria-label="Default select example" id="role" name="role">
-                                <option selected>Open this select menu</option>
+                                <option selected disabled>Open this select menu</option>
                                 <option value="admin">Admin</option>
                                 <option value="surveyor">Surveyor</option>
                                 <option value="3">Three</option>
@@ -155,6 +166,9 @@
 
     {{-- jqconfirm --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    {{-- toastr --}}
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/toastr/toastr.css') }}">
 @endpush
 
 @push('js')
@@ -176,6 +190,9 @@
 
     {{-- jqconfirm --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    {{-- toastr --}}
+    <script src="{{ asset('adminlte/plugins/toastr/toastr.min.js') }}"></script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
@@ -314,7 +331,9 @@
                     dataType: "json",
                     success: function(response) {
                         if (response.status == true) {
-                            toastr.success(response.message);
+                            toastr.succes(response.message, 'Success', {
+                                timeOut: 5000
+                            });
                         }
                         console.log(response);
                         $('#userFormPassword').trigger("reset");
@@ -341,7 +360,13 @@
                                 type: "delete",
                                 url: "{{ route('users') }}" + "/" + userId + "/delete",
                                 success: function(response) {
+                                    console.log(response);
                                     table.draw();
+                                    if (response.status == true) {
+                                        toastr.info(response.message, 'Success', {
+                                            timeOut: 5000
+                                        });
+                                    }
                                 },
                                 error: function(response) {
                                     console.log('Error : ', response);
