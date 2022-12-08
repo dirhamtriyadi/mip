@@ -104,14 +104,38 @@
                             <input type="email" class="form-control" id="email" name="email"
                                 aria-describedby="emailHelp">
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalTitlePassword">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="userFormPassword">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
+                            <p id="warning"></p>
+                        </div>
+                        <input type="text" id="userIdPassword" name="userIdPassword" hidden>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+                        <button type="submit" class="btn btn-primary" id="submitPassword">Submit</button>
                     </div>
                 </form>
             </div>
@@ -226,19 +250,21 @@
                 $('#userId').val('');
                 $('#modalTitle').html('Tambah User');
                 $('#userModal').modal('show');
+                $('#userForm').trigger('reset');
             });
 
             // edit
             $('body').on('click', '.editUser', function() {
                 var userId = $(this).data('id');
                 $.get("{{ route('users') }}" + "/" + userId + "/edit", function(data) {
-                    $('#modalTitle').html('Edit User');
+                    $('#userForm').trigger('reset');
                     $('#userModal').modal('show');
+                    $('#modalTitle').html('Edit User');
+                    $('#submit').html('Update');
                     $('#userId').val(data.id);
                     $('#role').val(data.role);
                     $('#name').val(data.name);
                     $('#email').val(data.email);
-                    $('#password').val('');
                 });
             });
 
@@ -258,8 +284,46 @@
                     },
                     error: function(response) {
                         console.log(response);
-                        $('#warning').html('Email sudah dipakai');
                         $('#submit').html('Save changes')
+                    }
+                });
+            });
+
+            // change password
+            $('body').on('click', '.editPasswordUser', function() {
+                var userId = $(this).data('id');
+                $.get("{{ route('users') }}" + "/" + userId + "/edit", function(data) {
+                    $('userFormPassword').trigger('reset');
+                    $('#passwordModal').modal('show');
+                    $('#modalTitlePassword').html('Ganti Password');
+                    $('#submitPassword').html('Update');
+                    $('#userIdPassword').val(data.id);
+                    $('#password').val('');
+                });
+            });
+
+            // click save password
+            $("#submitPassword").click(function(e) {
+                e.preventDefault();
+                $(this).html('Sending...');
+                console.log($('#userFormPassword').serialize());
+                $.ajax({
+                    type: "post",
+                    url: "{{ route('users.updatepassword') }}",
+                    data: $('#userFormPassword').serialize(),
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.status == true) {
+                            toastr.success(response.message);
+                        }
+                        console.log(response);
+                        $('#userFormPassword').trigger("reset");
+                        $('#passwordModal').modal('hide');
+                        table.draw();
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        $('#submitPassword').html('Save changes')
                     }
                 });
             });
