@@ -57,7 +57,10 @@ class UsersController extends Controller
             'password' => $hashPassword,
         ]);
 
-        return response()->json(['success' => 'User berhasil disimpan.']);
+        return response()->json([
+            'status' => true,
+            'success' => 'User berhasil disimpan.'
+        ]);
     }
 
     public function updatePassword(Request $request)

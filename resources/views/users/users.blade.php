@@ -115,6 +115,10 @@
                             <input type="email" class="form-control" id="email" name="email"
                                 aria-describedby="emailHelp">
                         </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -141,7 +145,7 @@
                         <input type="text" id="userIdPassword" name="userIdPassword" hidden>
                         <div class="mb-3">
                             <label for="name" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="passwordUpdate" class="form-control" id="passwordUpdate" name="password">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -158,11 +162,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
-    {{-- css datatables --}}
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/rowreorder/1.3.1/css/rowReorder.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.dataTables.min.css">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('adminlte') }}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('adminlte') }}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('adminlte') }}/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
     {{-- jqconfirm --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -176,17 +179,23 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
     </script>
 
-    {{-- js datatables --}}
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/rowreorder/1.3.1/js/dataTables.rowReorder.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <!-- jQuery -->
+    <script src="{{ asset('adminlte') }}/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('adminlte') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="{{ asset('adminlte') }}/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/jszip/jszip.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="{{ asset('adminlte') }}/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 
     {{-- jqconfirm --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
@@ -298,6 +307,11 @@
                         $('#userForm').trigger("reset");
                         $('#userModal').modal('hide');
                         table.draw();
+                        if (response.status == true) {
+                            toastr.success(response.message, 'Success input users', {
+                                timeOute: 5000,
+                            })
+                        }
                     },
                     error: function(response) {
                         console.log(response);
@@ -315,7 +329,7 @@
                     $('#modalTitlePassword').html('Ganti Password');
                     $('#submitPassword').html('Update');
                     $('#userIdPassword').val(data.id);
-                    $('#password').val('');
+                    $('#passwordUpdate').val('');
                 });
             });
 
@@ -331,7 +345,7 @@
                     dataType: "json",
                     success: function(response) {
                         if (response.status == true) {
-                            toastr.succes(response.message, 'Success', {
+                            toastr.success(response.message, 'Success update password', {
                                 timeOut: 5000
                             });
                         }
@@ -363,7 +377,7 @@
                                     console.log(response);
                                     table.draw();
                                     if (response.status == true) {
-                                        toastr.info(response.message, 'Success', {
+                                        toastr.success(response.message, 'Success', {
                                             timeOut: 5000
                                         });
                                     }
