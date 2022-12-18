@@ -70,7 +70,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="nasabahModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -216,7 +216,7 @@
 
             // Click add
             $('#addNasabahButton').click(function() {
-                $('#userModal').modal('show');
+                $('#nasabahModal').modal('show');
                 $('#nasabahForm').trigger("reset");
                 $('#modelHeading').html("Tambah Nasabah");
                 $('#nasabahId').val('');
@@ -236,7 +236,7 @@
                         $('#nasabahModal').modal('hide');
                         table.draw();
                         if (response.status == true) {
-                            toastr.success(response.message, 'Success input users', {
+                            toastr.success(response.success, 'Success input', {
                                 timeOute: 5000,
                             })
                         }
