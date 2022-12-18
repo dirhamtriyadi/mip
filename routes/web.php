@@ -35,4 +35,7 @@ Route::middleware(['auth', 'admin.auth'])->group(function () {
     Route::post('/users/updatepassword', [\App\Http\Controllers\UsersController::class, 'updatePassword'])->name('users.updatepassword');
     Route::get('/users/{id}/edit', [\App\Http\Controllers\UsersController::class, 'edit'])->name('users.edit');
     Route::delete('/users/{id}/delete', [\App\Http\Controllers\UsersController::class, 'destroy'])->name('users.delete');
+
+    Route::get('/nasabah', [\App\Http\Controllers\NasabahController::class, 'index'])->name('nasabah');
+    Route::post('/nasabah', [\App\Http\Controllers\NasabahController::class, 'store'])->name('nasabah.store');
 });

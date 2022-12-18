@@ -69,6 +69,29 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item {{ Route::is('nasabah*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ Route::is('nasabah*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Nasabah
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('nasabah') }}" class="nav-link {{ Route::is('nasabah') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Nasabah</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ asset('adminlte') }}/index2.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Angsuran</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('users') }}" class="nav-link {{ Route::is('users') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-users"></i>
