@@ -306,7 +306,6 @@
                         $('#userForm').trigger('reset');
                         $('#userModal').modal('hide');
                         table.draw();
-                        console.log(response);
                         if (response.status == true) {
                             toastr.success(response.success, 'Success input', {
                                 timeOute: 5000,
