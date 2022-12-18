@@ -179,6 +179,7 @@
 
     <!-- jQuery -->
     <script src="{{ asset('adminlte') }}/plugins/jquery/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('adminlte') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables  & Plugins -->
@@ -203,7 +204,8 @@
 
 
     {{-- momentjs --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-CryKbMe7sjSCDPl18jtJI5DR5jtkUWxPXWaLCst6QjH8wxDexfRJic2WRmRXmstr2Y8SxDDWuBO6CQC6IE4KTA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -213,6 +215,10 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            // Format DataTable
+            // DataTable.datetime('D MMM YYYY')
+            console.log(moment().format('D MMM YYYY'));
 
             // DataTable
             var table = $('.table').DataTable({
@@ -258,12 +264,12 @@
                     }
                 ],
                 columnDefs: [{
-                    target: 4,
+                    targets: 4,
                     render: function(data) {
                         return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
                     }
                 }, {
-                    target: 5,
+                    targets: 5,
                     render: function(data) {
                         return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
                     }
@@ -376,7 +382,8 @@
                                     console.log(response);
                                     table.draw();
                                     if (response.status == true) {
-                                        toastr.success(response.message, 'Success', {
+                                        toastr.success(response.message,
+                                        'Success', {
                                             timeOut: 5000
                                         });
                                     }

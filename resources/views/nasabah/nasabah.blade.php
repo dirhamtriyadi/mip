@@ -202,12 +202,12 @@
                     },
                 ],
                 columnDefs: [{
-                    target: 3,
+                    targets: 3,
                     render: function(data) {
-                        return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
+                        return moment.utc(data).local().format("YYYY/MM/DD hh:mm:ss")
                     }
                 }, {
-                    target: 4,
+                    targets: 4,
                     render: function(data) {
                         return moment.utc(data).local().format('YYYY/MM/DD hh:mm:ss')
                     }
