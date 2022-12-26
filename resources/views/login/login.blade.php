@@ -23,11 +23,9 @@
       <a href="/" class="h1"><b>Admin</b>LTE</a>
     </div>
     <div class="card-body">
-      @if (Session::get('email'))
-          <ul>
-            <li>{{ $request->session()->all(); }}</li>
-          </ul>
-      @endif
+      @error('email')
+          <div class="alert alert-danger">{{ $message }}</div>
+      @enderror
       <p class="login-box-msg">Sign in to start your session</p>
 
       <form action="{{ route('login.login') }}" method="POST">
